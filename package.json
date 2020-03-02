@@ -1,0 +1,11 @@
+{
+  "name": "noor",
+  "version": "0.0.1",
+  "description": "Build your CMS frontend the easy way with Noor and Vue!",
+  "repository": "https://github.com/ejez/noor",
+  "author": "Ejez <ejez@protonmail.ch>",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}
