@@ -6,4 +6,4 @@
   publish = "/styleguide/"
 
   # Default build command.
-  command = "styleguidist build"
+  command = "yarn styleguide:build"
