@@ -1,4 +1,6 @@
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const path = require('path')
+
 module.exports = {
   title: 'Noor Docs',
 
@@ -32,6 +34,13 @@ module.exports = {
   },
 
   webpackConfig: {
+    resolve: {
+      alias: {
+        noor: path.resolve(__dirname),
+        src: path.resolve(__dirname, 'src/example-app/src/')
+      }
+    },
+
     module: {
       rules: [
         // Vue loader

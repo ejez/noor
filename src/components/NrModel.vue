@@ -1,6 +1,5 @@
 <script>
-import NrModelWrapper from './NrModelWrapper.vue'
-import NrFieldGeneric from './NrFieldGeneric.vue'
+import { getFieldsRenderArgs, compImportFunc } from './utils'
 
 /**
  * A component that renders an individual CMS model (article, blog
@@ -21,7 +20,7 @@ export default {
 
     renderArgs: {
       type: Array,
-      default () { return [NrModelWrapper] }
+      default () { return [compImportFunc('NrModelWrapper')] }
     }
   },
 
@@ -31,45 +30,7 @@ export default {
      * args are passed to Vue `createElement()` to build each field element.
      */
     fieldsRenderArgs () {
-      return this.getFieldsRenderArgs(this.fields)
-    }
-  },
-
-  methods: {
-    getFieldsRenderArgs (fields) {
-      const fieldsRenderArgs = []
-
-      // loop through the provided fields
-      Object.entries(fields).forEach(([field, value]) => {
-        // if the field value is an array, then we use it as the render args
-        // without further processing, this allows
-        if (Array.isArray(value)) {
-          fieldsRenderArgs.push(value)
-        } else {
-          const fieldCapitalized = field.charAt(0).toUpperCase() +
-                                   field.slice(1)
-
-          const getFieldComponent = () =>
-            import(`./NrField${fieldCapitalized}.vue`).then(
-              fieldComponent => fieldComponent,
-              () => NrFieldGeneric
-            )
-
-          if (typeof value === 'object') {
-            fieldsRenderArgs.push([
-              getFieldComponent,
-              value
-            ])
-          } else {
-            fieldsRenderArgs.push([
-              getFieldComponent,
-              { props: { content: value } }
-            ])
-          }
-        }
-      })
-
-      return fieldsRenderArgs
+      return getFieldsRenderArgs(this.fields)
     }
   },
 
