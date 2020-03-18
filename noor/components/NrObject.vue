@@ -1,7 +1,5 @@
 <template>
-  <div class="nr-object">
-    <slot />
-  </div>
+  <div><slot /></div>
 </template>
 
 <script>

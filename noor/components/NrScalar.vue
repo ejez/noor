@@ -1,7 +1,5 @@
 <template>
-  <div class="nr-scalar">
-    {{ data }}
-  </div>
+  <div>{{ data }}</div>
 </template>
 
 <script>
@@ -10,9 +8,7 @@ export default {
 
   props: {
     data: {
-      validator (data) {
-        return typeof data !== 'object'
-      },
+      validator (data) { return typeof data !== 'object' },
       required: true
     }
   }
