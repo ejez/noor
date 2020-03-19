@@ -10,6 +10,10 @@ export default {
       validator () { return true },
       required: true
     },
+    renderData: {
+      type: Object,
+      required: true
+    },
     lib: {
       type: [String, Object],
       required: true
@@ -45,17 +49,37 @@ export default {
       }
 
       return data
+    },
+
+    getRenderData () {
+      const props = {
+        data: this.normalizeData(),
+        lib: this.lib,
+        parents: this.parents
+      }
+
+      if (typeof this.data === 'object') {
+        return {
+          props: { ...props, renderData: this.renderData }
+        }
+      }
+
+      if (typeof this.renderData.props === 'object') {
+        return {
+          ...this.renderData,
+          props: { ...this.renderData.props, ...props }
+        }
+      }
+
+      return {
+        ...this.renderData,
+        props
+      }
     }
   },
 
   render (h) {
-    return h(this.comp, {
-      props: {
-        data: this.normalizeData(),
-        parents: this.parents,
-        lib: this.lib
-      }
-    })
+    return h(this.comp, this.getRenderData())
   }
 }
 </script>

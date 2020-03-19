@@ -13,6 +13,10 @@ export default {
       type: Object,
       required: true
     },
+    renderData: {
+      type: Object,
+      default () { return {} }
+    },
     lib: {
       type: [String, Object],
       default: conf.defaultComponentsLibrary || 'vue'
@@ -28,8 +32,16 @@ export default {
   },
 
   methods: {
-    normalizeChildLibProp (child) {
-      const libProp = this.lib[child]
+    getChildRenderDataProp (child) {
+      const renderDataProp =
+        this.renderData[child] ||
+        this.renderData[child.split('___')[0]]
+
+      return typeof renderDataProp === 'object' ? renderDataProp : {}
+    },
+
+    getChildLibProp (child) {
+      const libProp = this.lib[child] || this.lib[child.split('___')[0]]
 
       if (libProp) {
         if (typeof libProp === 'object' && !libProp.self) {
@@ -51,14 +63,21 @@ export default {
         {
           props: {
             data: this.data[child],
-            lib: this.normalizeChildLibProp(child),
+            renderData: this.getChildRenderDataProp(child),
+            lib: this.getChildLibProp(child),
             parents: [...this.parents, child]
           }
         }
       ))
     }
 
-    return h(this.comp, children)
+    return h(
+      this.comp,
+      typeof this.renderData.self === 'object'
+        ? { ...this.renderData.self }
+        : {},
+      children
+    )
   }
 }
 </script>
