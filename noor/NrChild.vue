@@ -18,6 +18,10 @@ export default {
       type: [String, Object],
       required: true
     },
+    excludeKeys: {
+      type: Array,
+      required: true
+    },
     parents: {
       type: Array,
       required: true
@@ -60,7 +64,11 @@ export default {
 
       if (typeof this.data === 'object') {
         return {
-          props: { ...props, renderData: this.renderData }
+          props: {
+            ...props,
+            renderData: this.renderData,
+            excludeKeys: this.excludeKeys
+          }
         }
       }
 

@@ -21,6 +21,10 @@ export default {
       type: [String, Object],
       default: conf.defaultComponentsLibrary || 'vue'
     },
+    excludeKeys: {
+      type: Array,
+      default () { return conf.excludeKeys || ['id', '_id', '__typename'] }
+    },
     parents: {
       type: Array,
       default () { return [] }
@@ -58,17 +62,20 @@ export default {
     const children = []
 
     for (const child of Object.keys(this.data)) {
-      children.push(h(
-        NrChild,
-        {
-          props: {
-            data: this.data[child],
-            renderData: this.getChildRenderDataProp(child),
-            lib: this.getChildLibProp(child),
-            parents: [...this.parents, child]
+      if (!this.excludeKeys.includes(child)) {
+        children.push(h(
+          NrChild,
+          {
+            props: {
+              data: this.data[child],
+              renderData: this.getChildRenderDataProp(child),
+              lib: this.getChildLibProp(child),
+              excludeKeys: this.excludeKeys,
+              parents: [...this.parents, child]
+            }
           }
-        }
-      ))
+        ))
+      }
     }
 
     return h(
